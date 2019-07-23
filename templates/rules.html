@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<title>Pulzion 2019 MCQ</title>
+
+<link href="{% static "css/rules.css" %}" rel='stylesheet'>
+<script>
+    function deleteAllCookies()
+    {
+        var d = new Date();
+        d.setTime(d.getTime()-15*60*1000);
+        document.cookie.split(";").forEach(function(c)
+        {
+            console.log(c);
+            if(c.split("=")[0] !== "csrftoken")
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + d.toGMTString() + ";path=/");
+            else
+                console.log("CSRF token cookie not deleted!");
+        });
+    }
+    deleteAllCookies();
+</script>
+</head>
+<body>
+		
+<div id='stars'></div>
+<div id='stars2'></div>
+<div id='stars3'></div>
+<div class="rules">
+    <center>
+      <h1><b>Set of Rules</b></h1>
+    </center>
+    <ul>
+      <li>
+        <h2>Section 1:</h2>
+        <p>
+          • No internet Access is available .  
+          <br>• Session is of 30 minutes.
+          <br>• There are Total 50 Questions. 
+          <br>• No Negative Marking Is there. 
+        </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <h2>Section 2:</h2>
+        <p>
+          • Do Not Peek In Another User's PC!  
+          <br> • You can Bookmark Any Question  by clicking On Bookmark button.
+          <br> • Blue sign Indicates Bookmarked.
+          <br> • Green Sign Indicates Attempted.
+          <br> • You Can View Total Bookmarked Question In Question List!
+        </p>
+      </li>
+    </ul>
+</div> 
+<a href="/questions" class="submit">N E X T</a>
+</body>
+</html>

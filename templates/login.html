@@ -1,0 +1,100 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<title>Pulzion 2019 MCQ</title>
+
+  <script src="{% static "cdn/jquery.min.js" %}"></script>
+
+  <link href="{% static "css/login.css" %}" rel='stylesheet'>
+
+  <script>
+
+    function timestamp()
+    {
+        var date = new Date();
+        return "" + date.getFullYear() + ("0" + (date.getMonth()+1)).slice(-2) + ("0" + (date.getDate())).slice(-2) + ("0" + (date.getHours())).slice(-2) + ("0" + (date.getMinutes())).slice(-2) + ("0" + (date.getSeconds())).slice(-2);
+    }
+
+    $(document).ready(function(){
+            var f=1;
+            $("form").submit(function(e){
+                if(f){
+                e.preventDefault();
+                $("#id_password2").val($("#id_password1").val());
+                f=0;
+                //setCookie("time", timestamp(), 1);
+                $("#timestamp").val(timestamp());
+                $("form").submit();
+                }           });
+        });
+  </script>
+
+</head>
+<body translate="no">
+		
+<div id='stars'></div>
+<div id='stars2'></div>
+<div id='stars3'></div>
+
+<div id="content" class="col-md-6" style="visibility: visible">
+    <h1 class="flicker " style="opacity: 0.889582">PULZION<br>2019</h1>
+</div>
+
+<script>
+    function setFlickers() {
+        var flickers = $('.flicker');
+        $(flickers).each(function (e) {
+            var delay = 500;
+            $(this).css('blend-mode', 'screen');
+            flicker(this);
+            function flicker(obj) {
+                var dur = Math.random() * 200;
+                $(obj).animate({
+                        'opacity': Math.random() * 0.25 + 0.75 },
+                    dur, function () {
+                        $(obj).animate({
+                                'opacity': 1.0 },
+                            dur, flicker(obj));
+                    });
+            }
+        });
+    }
+    setFlickers();
+</script>
+
+<div class="container">
+	<div class="avatar">
+        <img src="{% static "img/logo.png" %}" alt="Skytsunami" >
+	</div>
+</div> 
+  <div class="login-wrap">
+  <div class="login-html">
+    <form method="post">
+      {% csrf_token %}
+    <div class="login-form">
+      <div class="sign-in-htm">
+        <div class="group">
+          <label for="id_username" class="label"></label>
+          <input id="id_username" name="username" type="text" class="input" autofocus required placeholder="Username">
+        </div>
+        <div class="group">
+          <label for="id_password1" class="label"></label>
+          <input id="id_password1" type="password" name="password1" required class="input" data-type="Password" placeholder="password">
+          <input id="id_password2" type="hidden" name="password2" data-type="Password">
+          <input id="timestamp" type="hidden" name="timestamp">
+        </div>
+           <div class="group" style="text-align: center;">
+             <b style="color: red">{{err}}<br>&nbsp;</b>
+          <input type="submit" class="button" value="Sign In">
+          </div>
+        </div>
+      </div>
+    </form>
+      </div>
+    </div>
+</body>
+</html>
