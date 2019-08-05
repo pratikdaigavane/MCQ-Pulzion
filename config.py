@@ -16,7 +16,7 @@ totalQuestions = 10
 marksCorrect = 4
 
 # Incorrect Marks(DO NOT ADD MINUS SIGN!!!)
-marksIncorrect = 1
+marksIncorrect = 0
 
 
 
