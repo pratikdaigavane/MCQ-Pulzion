@@ -16,3 +16,7 @@ class Scores(models.Model):
     username = models.TextField()
     event = models.TextField()
     score = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Scores"
