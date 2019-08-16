@@ -11,8 +11,6 @@ from config import *
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-
-
 cred = credentials.Certificate('./firekey.json')
 if not len(firebase_admin._apps):
     firebase_admin.initialize_app(cred)
@@ -39,17 +37,48 @@ errdt = HttpResponse("<h2 style='color: red;'>Error : 4572724461746554696d65</h2
 
 
 def loggedin_view(request):
-    if(request.session.get('authenticate', None) == 'yes'):    
+    if (request.session.get('authenticate', None) == 'yes'):
         request.session['questions'] = []
         request.session['questions'].clear()
         request.session['questions'].append(total_questions_mcq)
-        for i in range(1, total_questions_mcq + 1, 1):
-            request.session['questions'].append(random.randrange(1, total_questions_db + 1, 1))
+        # for i in range(1, total_questions_mcq + 1, 1):
+        #     request.session['questions'].append(random.randrange(1, total_questions_db + 1, 1))
+        count = 0
+        while True:
+            if count == level1:
+                break
+            num = random.randrange(1, total_questions_db + 1, 1)
+            queLevel = Question.objects.get(id=num).level
+            if queLevel == 1:
+                count += 1
+                request.session['questions'].append(num)
+        count = 0
+        while True:
+            if count == level2:
+                break
+            num = random.randrange(1, total_questions_db + 1, 1)
+            queLevel = Question.objects.get(id=num).level
+            if queLevel == 2:
+                count += 1
+                request.session['questions'].append(num)
+        count = 0
+        while True:
+            if count == level3:
+                break
+            num = random.randrange(1, total_questions_db + 1, 1)
+            queLevel = Question.objects.get(id=num).level
+            if queLevel == 3:
+                count += 1
+                request.session['questions'].append(num)
+        print(request.session['questions'])
+        random.shuffle(request.session['questions'])
+        print(request.session['questions'])
+
+
         request.session['score'] = 0
         return render(request, "rules.html", {'first': request.session['questions'][1]})
     else:
         return render(request, "403.html", {})
-
 
 
 def questions_api(request):  # if random function is used in url it always return 2
@@ -71,15 +100,15 @@ def questions_api(request):  # if random function is used in url it always retur
 
 
 def questions_view(request):
-    if(request.session.get('authenticate', None) == 'yes'):       
+    if (request.session.get('authenticate', None) == 'yes'):
         if not ('endtime' in request.session):
             request.session['endtime'] = int(timestamp()) + duration
-            if (request.session['endtime'])%100 > 60:
-                request.session['endtime']+=100
-                request.session['endtime']-=60
-            if (request.session['endtime'])%10000 > 6000:
-                request.session['endtime']+=10000
-                request.session['endtime']-=6000
+            if (request.session['endtime']) % 100 > 60:
+                request.session['endtime'] += 100
+                request.session['endtime'] -= 60
+            if (request.session['endtime']) % 10000 > 6000:
+                request.session['endtime'] += 10000
+                request.session['endtime'] -= 6000
 
         context = {
             'event': eventName,
@@ -94,16 +123,14 @@ def questions_view(request):
         return render(request, "403.html", {})
 
 
-
 def loggedout_view(request):
     return render(request, "loggedout.html", {})
 
 
 def register_view(request):
-    
-    if(request.COOKIES.get('just_cause')=='tMgaCNOgpybhQL4jZOVoViuKRsRfUyVHN9JkmBU4h7Cf6tlT33zsdSb7MShmgini'):
+    if (request.COOKIES.get('just_cause') == 'tMgaCNOgpybhQL4jZOVoViuKRsRfUyVHN9JkmBU4h7Cf6tlT33zsdSb7MShmgini'):
         request.session['authenticate'] = 'yes'
-        err=""
+        err = ""
         if request.method == "POST":
             if not verifyTime(request.POST['timestamp']):
                 return errdt
@@ -145,27 +172,28 @@ def register_view(request):
             "form": form,
             "err": err
         }
-        err=""
+        err = ""
         return render(request, "login.html", context)
     else:
         return render(request, "403.html", {})
 
 
+def set_cookie(response, key, value, days_expire=7):
+    if days_expire is None:
+        max_age = 365 * 24 * 60 * 60  # one year
+    else:
+        max_age = days_expire * 24 * 60 * 60
+    expires = datetime.datetime.strftime(datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age),
+                                         "%a, %d-%b-%Y %H:%M:%S GMT")
+    response.set_cookie(key, value, max_age=max_age, expires=expires, domain=settings.SESSION_COOKIE_DOMAIN,
+                        secure=settings.SESSION_COOKIE_SECURE or None)
 
-def set_cookie(response, key, value, days_expire = 7):
-  if days_expire is None:
-    max_age = 365 * 24 * 60 * 60  #one year
-  else:
-    max_age = days_expire * 24 * 60 * 60 
-  expires = datetime.datetime.strftime(datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age), "%a, %d-%b-%Y %H:%M:%S GMT")
-  response.set_cookie(key, value, max_age=max_age, expires=expires, domain=settings.SESSION_COOKIE_DOMAIN, secure=settings.SESSION_COOKIE_SECURE or None)
 
 def logout_request(request):
-    if(request.session.get('authenticate', None) == 'yes'):
+    if (request.session.get('authenticate', None) == 'yes'):
         set_cookie(response, 'just_cause', 'tMgaCNOgpybhQL4jZOVoViuKRsRfUyVHN9JkmBU4h7Cf6tlT33zsdSb7MShmgini')
         logout(request)
         messages.info(request, "Bye!")
         return redirect("register")
     else:
         return render(request, "403.html", {})
-

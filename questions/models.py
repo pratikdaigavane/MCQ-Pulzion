@@ -10,6 +10,7 @@ class Question(models.Model):
     option_c = models.TextField()
     option_d = models.TextField()
     correct_option = models.CharField(max_length=1, blank=False, null=False)
+    level = models.PositiveSmallIntegerField(default=1)
 
 
 class Scores(models.Model):
