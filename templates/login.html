@@ -3,15 +3,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<title>Pulzion 2019 MCQ</title>
+    <title>Pulzion 2019 MCQ</title>
 
-  <script src="{% static "cdn/jquery.min.js" %}"></script>
 
-  <link href="{% static "css/login.css" %}" rel='stylesheet'>
+    <script src = '{% static "cdn/jquery.min.js" %}' ></script>
+    <script src = '{% static "cdn/bootstrap.min.js" %}' ></script>
 
-  <script>
+    <link href='{% static "css/login.css" %}' rel='stylesheet'>
+    <link href='{% static "cdn/bootstrap.min.css" %}' rel='stylesheet'>
+
+    <style>
+
+        .login-box {
+            position: absolute;
+            top: 50%;
+            left: 80%;
+            transform: translate(-50%, -50%);
+            width: 380px;
+            height: 520px;
+            padding: 50px;
+            background: rgba(0, 0, 0, .8);
+            box-sizing: border-box;
+            border-radius: 10px;
+            color: #03a9f4;
+            -webkit-box-shadow: 0px 0 40px 5px rgba(73, 196, 227, 0.6);
+            -moz-box-shadow: 0px 0px 40px 5px rgba(73, 196, 227, 0.6);
+            box-shadow: 0px 0px 40px 5px rgba(73, 196, 227, 0.6);
+        }
+
+        .login-box h1 {
+            margin: 0 0 50px;
+            padding: 0;
+            color: silver;
+            text-align: center;
+        }
+
+        .login-box .inputBox {
+            position: relative;
+            /*padding-bottom: 50px;*/
+        }
+
+
+
+        .login-box .inputBox input {
+            width: 100%;
+            padding: 10px 0;
+
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: #03a9f4;
+            margin-bottom: 30px;
+            border: none;
+            border-bottom: 1px solid #fff;
+            outline: none;
+            background: transparent;
+
+        }
+
+        .login-box .inputBox label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px 0;
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: silver;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: .5s;
+        }
+
+        .login-box .inputBox input:focus ~ label,
+        .login-box .inputBox input:valid ~ label {
+            top: -25px;
+            left: 0;
+            color: #03a9f4;
+            font-size: 16px;
+            font-weight: 600;
+            opacity: 1;
+        }
+
+        .login-box input[type="submit"] {
+            /*background: transparent;*/
+            border: none;
+            outline: none;
+            color: white;
+            background: #03a9f4;
+            padding: 10px 20px;
+            font-size: 22px;
+            cursor: pointer;
+            border-radius: 5px;
+            position: relative;
+            width: 100%;
+        }
+        .login-box input:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        .login-box a {
+            float: right;
+            font-size: 22px;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .login-box a:hover {
+            color: #03a9f4;
+        }
+
+		.event-logo{
+			width: 30vh;
+			height: 30vh;
+		}
+
+		.event-logo-wrapper{
+			position: absolute;
+			text-align: center;
+			color: white;
+			box-shadow: -2px -2px 20px 0px rgba(73, 196, 227, 0.9);
+			border-bottom-right-radius: 25px;
+			background: black;
+		}
+
+		/*.col-md-6{*/
+		/*	flex: none;*/
+		/*	-ms-flex: none;*/
+		/*}*/
+
+    </style>
+
+	<script>
 
     function timestamp()
     {
@@ -19,30 +144,21 @@
         return "" + date.getFullYear() + ("0" + (date.getMonth()+1)).slice(-2) + ("0" + (date.getDate())).slice(-2) + ("0" + (date.getHours())).slice(-2) + ("0" + (date.getMinutes())).slice(-2) + ("0" + (date.getSeconds())).slice(-2);
     }
 
-    $(document).ready(function(){
-            var f=1;
-            $("form").submit(function(e){
-                if(f){
-                e.preventDefault();
-                $("#id_password2").val($("#id_password1").val());
-                f=0;
-                //setCookie("time", timestamp(), 1);
-                $("#timestamp").val(timestamp());
-                $("form").submit();
-                }           });
-        });
-  </script>
+	$(document).ready(function () {
+		var f = 1;
+		$("#formsub").submit(function(e){
+			if(f===1){
+				e.preventDefault();
+				$("#id_password2").val($("#id_password1").val());
+				f = 0;
+				$("#timestamp").val(timestamp());
+				$("#subfrm").attr("disabled", true).val("Signing In...");
+				$("#formsub").submit();
 
-</head>
-<body translate="no">
-		
+			}
+		});
+	});
 
-
-<div id="content" class="col-md-6" style="visibility: visible">
-    <h1  style="opacity: 0.889582">PULZION<br>2019</h1>
-</div>
-
-<script>
     function setFlickers() {
         var flickers = $('.flicker');
         $(flickers).each(function (e) {
@@ -64,35 +180,47 @@
     setFlickers();
 </script>
 
+</head>
+<body translate="no">
+<div id='stars'></div>
+<div class="event-logo-wrapper">
+	<img class="event-logo" src="{% static "img/event_logo.jpg" %}" >
+	<h1>Cerebro</h1>
+</div>
+<div id="content" class="col-md-6" style="visibility: visible">
+    <h1 class="flicker" style="opacity: 0.889582">PULZION<br>2019</h1>
+
+</div>
+<div class="login-box">
+    <h1>Login</h1>
+    <form method="post" id="formsub">
+		{% csrf_token %}
+        <div class="inputBox" style="padding-bottom: 30px;">
+            <input type="text" name="username" id="id_username" required>
+            <label>Username</label>
+        </div>
+        <div class="inputBox" style="padding-bottom: 0px;" >
+            <input type="password" name="password1" id="id_password1"required>
+			<input type="hidden" name="password2" id="id_password2">
+			<input id="timestamp" type="hidden" name="timestamp">
+            <label>Password</label>
+        </div>
+		<div class="group" style="text-align: center;">
+			<div style="height: 72px"><b style="color: red">{{err}}<br>&nbsp;</b></div>
+        	 <input type="submit" value="Sign In" id="subfrm">
+		</div>
+    </form>
+</div>
+
 <div class="container">
 	<div class="avatar">
-        <img src="{% static "img/logo.png" %}" alt="Skytsunami" >
+        <img src="{% static "img/logo.png" %}" >
 	</div>
-</div> 
-  <div class="login-wrap">
-  <div class="login-html">
-    <form method="post">
-      {% csrf_token %}
-    <div class="login-form">
-      <div class="sign-in-htm">
-        <div class="group">
-          <label for="id_username" class="label"></label>
-          <input id="id_username" name="username" type="text" class="input" autofocus required placeholder="Username">
-        </div>
-        <div class="group">
-          <label for="id_password1" class="label"></label>
-          <input id="id_password1" type="password" name="password1" required class="input" data-type="Password" placeholder="password">
-          <input id="id_password2" type="hidden" name="password2" data-type="Password">
-          <input id="timestamp" type="hidden" name="timestamp">
-        </div>
-           <div class="group" style="text-align: center;">
-             <b style="color: red">{{err}}<br>&nbsp;</b>
-          <input type="submit" class="button" value="Sign In">
-          </div>
-        </div>
-      </div>
-    </form>
-      </div>
-    </div>
+</div>
+
+
+
+
+
 </body>
 </html>

@@ -18,6 +18,8 @@ class Scores(models.Model):
     event = models.TextField()
     score = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True)
+    firebase = models.BooleanField(default=False)
+
 
     class Meta:
         verbose_name_plural = "Scores"

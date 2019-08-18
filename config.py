@@ -20,9 +20,9 @@ totalQuestions = 10
 # Level 1 Questions
 level1 = 4
 # Level 2 Questions
-level2 = 3
+level2 = 0
 # Level 3 Questions
-level3 = 3
+level3 = 0
 
 # Correct Marks
 marksCorrect = 4
