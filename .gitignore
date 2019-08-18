@@ -2,3 +2,7 @@ firekey.json
 secretKey.py
 .idea
 __pycache__
+mcq/__pycache__
+pages/__pycache__
+questions/__pycache__
+test_submit/__pycache__

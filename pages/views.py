@@ -130,7 +130,6 @@ def loggedout_view(request):
 
 
 def register_view(request):
-    
     if request.COOKIES.get('just_cause')== 'tMgaCNOgpybhQL4jZOVoViuKRsRfUyVHN9JkmBU4h7Cf6tlT33zsdSb7MShmgini':
         request.session['authenticate'] = 'yes'
         err=""
