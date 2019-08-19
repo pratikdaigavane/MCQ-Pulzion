@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.utils.datetime_safe import datetime
+from func_timeout import func_timeout, FunctionTimedOut
 from questions.models import Question, Scores
 import json
 from firebase_admin import credentials, firestore
@@ -15,6 +16,10 @@ def timestamp():
 # Create your views here.
 
 
+def firescore(request, dump):
+    db.collection("cerebro").document(request.session['userid']).update({'score': request.session['score']})
+
+
 def submit_data(request):
     ansdict = json.loads(str(request.POST['answers']))
     print(str(ansdict))
@@ -27,9 +32,9 @@ def submit_data(request):
                 request.session['score'] -= marksIncorrect
 
         try:
-            db.collection("cerebro").document(request.session['userid']).update({'score': request.session['score']})
+            func_timeout(7, firescore, args=(request, 0))
             fb = 1
-        except:
+        except FunctionTimedOut:
             fb = 0
 
         print(request.session['score'])
@@ -43,3 +48,4 @@ def submit_data(request):
         return render(request, "loggedout.html", context)
     else:
         return redirect("/")
+        

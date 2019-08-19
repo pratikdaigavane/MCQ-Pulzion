@@ -83,7 +83,7 @@ function getQuestion(reqQid)
         {
             setTimeout(function(){
                 qid=reqQid;
-                $("#quedisp").text(res.que);
+                $("#quedisp").html(res.que);
                 $("#qnum").text("Question No. " + qid);
                 $("#a").parent().parent().parent().find('.opttxt').text(res.opt1);
                 $("#b").parent().parent().parent().find('.opttxt').text(res.opt2);
@@ -171,6 +171,9 @@ function sub()
 {
     var obj = {};
     var cookie = document.cookie.split(";");
+    // $("#modalsubmit").attr("disabled", true).text("Submitting test...");
+    // document.getElementById("modalsubmit").disabled = true;
+    // document.getElementById("modalsubmit").innerText = "Submitting test...";
     for (x in cookie){
         if(x>0&&(cookie[x].split(":")[0].split(" ")[1].split("=")[0]!='csrftoken'))
         {
@@ -181,6 +184,8 @@ function sub()
 
     }
     document.getElementById("inpans").value = JSON.stringify(obj);
+    document.getElementById("modalsubmit").value = "Submitting test...";
+    document.getElementById("modalsubmit").disabled = true;
     console.log("\n\n" + JSON.stringify(obj));
     // deleteAllCookies();
 

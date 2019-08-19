@@ -356,7 +356,7 @@
           <form name="frmsubmit" onsubmit="return sub()" id="frmsubmit" action="{% url 'submit_data' %}" method="post">
     {% csrf_token %}
     <input type="hidden" id="inpans" name="answers" value="">
-    <button type="submit" id="modalsubmit" class="btn btn-outline-success">Yes, Submit</button>
+    <input type="submit" id="modalsubmit" class="btn btn-outline-success" value="Yes, Submit!">
 </form>
       </div>
     </div>
