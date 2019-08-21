@@ -42,11 +42,27 @@
   </head>
   <body>
     <!-- Navbar for submitting the test-->
+
+<div class="modal fade ide" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="max-width: 1000px">
+    <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="background-color: black">
+              <span aria-hidden="true"><i class="fa fa-times-circle" style="color: white"></i></span>
+            </button>
+       
+      
+          <iframe id="myFrame" src="{{ideHost}}" frameborder="0" width="1000" height="800" ></iframe>
+     
+      
+</div>
+  </div>
+</div>
+
     <nav class="navbar navbar-dark bg-dark  justify-content fixed-top" id="mainNav"  >
-      <a href="#">
-
-      </a>
-
+        <h3 class="primary" style="color: whitesmoke " > Hey,&nbsp;{{userName}}&nbsp;&nbsp;</h3>
+    
+   
+      
       <div class="timer bg-dark">
   <div class="timer--clock">
     <div class="minutes-group clock-display-grp">
@@ -206,6 +222,7 @@
 
       <div class="container container-main center">
         <h3 class="display-10">{{event}}</h3>
+       
       </div>
 
     </nav>
@@ -223,7 +240,7 @@
           <div class=" row full-width-row description box2 rounded">
            <!--  <button type="button" class="btn "> <i class="fa fa-expand"></i></button> -->
 
-           <h3  class="ques hide" id="quedisp">...</h3>
+           <pre style="white-space:pre-wrap;color: white; font-size: 1.7rem; font-family: 'Ubuntu Mono',monospace" class="ques hide" id="quedisp">...</pre>
         </div>
       </div>
 <div class="col-lg-4" >
@@ -305,21 +322,21 @@
 <!-- Bottom Navbar-->
 <nav class="navbar  navbar fixed-bottom navbar1" >
   <form class="form-inline">
-    <button type="button" class="btn btn-outline-warning btn2" id="btnprev" onclick="getQuestion(qid-1)"><i class=" fa fa-arrow-left"></i>&nbsp&nbsp Previous Question</button>
     <button type="button" class="btn btn-outline-primary btn2" onclick="bookmark()"> <i class=" fa fa-bookmark"></i>&nbsp&nbspBookmark</button>
+    <button type="button" class="btn btn-outline-danger btn2 " data-toggle="modal" data-target=".ide"> <i class="fa fa-code"></i> &nbsp&nbspShow IDE</button>
+    &nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;
+    <button type="button" class="btn btn-outline-warning btn2" id="btnprev" onclick="getQuestion(qid-1)"><i class=" fa fa-arrow-left"></i>&nbsp&nbsp Previous Question</button>
+    <button type="button" class="btn  hide-on-small-only btn-outline-success btn2 " id="btnnext" onclick="getQuestion(qid+1)"><span class="hide-on-small-only">&nbsp&nbspSave & Next </span> <i class=" fa fa-arrow-right"></i></button>
 
 
-    <button type="button" class="btn btn-outline-danger btn2 "> <i class="fa fa-reply"></i>&nbsp&nbspReport</button>
    <!--  <button type="button" class="btn btn-outline-info btn2"><i class=" fa fa-eraser"></i>&nbsp&nbspClear Response</button> -->
 
   <!--  <button data-toggle="collapse" type="button" class="btn btn-outline-primary btn2 btns" data-toggle="modal" data-target="#exampleModalCenter">Submit
         </button> -->
         <button type="button" class="btn btn-outline-primary btn2 btns" id="btnsubmit" data-toggle="modal" data-target="#exampleModalCenter">
-  Submit
+  End Test
 </button>
-    <button type="button" class="btn  hide-on-small-only btn-outline-success btns btn2 " id="btnnext" onclick="getQuestion(qid+1)" style="
-    right: 100px;"
-><span class="hide-on-small-only">&nbsp&nbspSave & Next </span> <i class=" fa fa-arrow-right"></i></button>
 
 
 
@@ -356,7 +373,7 @@
           <form name="frmsubmit" onsubmit="return sub()" id="frmsubmit" action="{% url 'submit_data' %}" method="post">
     {% csrf_token %}
     <input type="hidden" id="inpans" name="answers" value="">
-    <input type="submit" id="modalsubmit" class="btn btn-outline-success" value="Yes, Submit!">
+    <input type="submit" id="modalsubmit" class="btn btn-outline-success heythere" value="Yes, Submit!">
 </form>
       </div>
     </div>
@@ -397,6 +414,15 @@
 //       e.preventDefault();
 //       $(this).hide();
 //     });
+
+</script>
+<script>
+ $(document).ready(function () {
+    $("#frmsubmit").submit(function () {
+        $(".heythere").attr("disabled", true);
+        return true;
+    });
+});
 
 </script>
 

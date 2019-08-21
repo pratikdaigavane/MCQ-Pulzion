@@ -10,6 +10,7 @@ from django.contrib.auth import logout
 cred = credentials.Certificate('./firekey.json')
 db = firestore.client()
 
+
 def timestamp():
     return datetime.now().strftime('%Y%m%d%H%M%S')
 
@@ -17,7 +18,8 @@ def timestamp():
 
 
 def firescore(request, dump):
-    db.collection("cerebro").document(request.session['userid']).update({'score': request.session['score']})
+    db.collection(eventNameDatabase).document(request.session['userid']).update(
+        {'score': request.session['score']})
 
 
 def submit_data(request):
@@ -39,7 +41,15 @@ def submit_data(request):
 
         print(request.session['score'])
         score = request.session['score']
-        Scores.objects.create(username=request.user.username, event=eventName, score=score, firebase=fb)
+        Scores.objects.create(name=request.session['name'], username=request.user.username,
+                              event=eventName, score=score, firebase=fb)
+        ranks = Scores.objects.all().order_by('-score')[:10]
+        print("--------------------------------------------")
+        print(len(ranks))
+        print("--------------------------------------------")
+        for y in ranks:
+            print(str(y.name) + "    " + str(y.score))
+
         logout(request)
         context = {
             'score': score
@@ -48,4 +58,3 @@ def submit_data(request):
         return render(request, "loggedout.html", context)
     else:
         return redirect("/")
-        

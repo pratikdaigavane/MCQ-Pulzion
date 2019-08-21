@@ -15,7 +15,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 class ScoresAdmin(admin.ModelAdmin):
-    list_display = ('username', 'event', 'score', 'created')
+    list_display = ('name', 'username', 'event', 'score', 'created')
     search_fields = ('username',)
     list_filter = ('created', 'event')
 

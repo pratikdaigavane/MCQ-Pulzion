@@ -2,6 +2,10 @@
 
 # Event Name
 eventName = 'Cerebro'
+eventNameDatabase = 'cerebro'
+
+ideHost = 'https://ide.codingblocks.com/'
+
 
 # Duration of test
 duration = 2500  # Format mmss
@@ -20,9 +24,9 @@ totalQuestions = 10
 # Level 1 Questions
 level1 = 4
 # Level 2 Questions
-level2 = 0
+level2 = 3
 # Level 3 Questions
-level3 = 0
+level3 = 3
 
 # Correct Marks
 marksCorrect = 4

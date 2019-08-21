@@ -22,17 +22,17 @@ total_questions_db = Question.objects.count()
 
 
 def loginquery(email, pwd, request):
-    query = db.collection("cerebro").where('email', '==', email).get()
+    query = db.collection(eventNameDatabase).where('email', '==', email).get()
     f = 0
     for x in query:
         data = x.to_dict()
         if data['email'] == email and data['ticketno'] == pwd:
+            print("valiated")
             f = 1
             request.session['userid'] = x.id
             request.session['name'] = data['name']
             name = data['name']
     return f
-
 
 
 def timestamp():
@@ -45,7 +45,8 @@ def verifyTime(ctime):
     return False
 
 
-errdt = HttpResponse("<h2 style='color: red;'>Error : 4572724461746554696d65</h2>")
+errdt = HttpResponse(
+    "<h2 style='color: red;'>Error : 4572724461746554696d65</h2>")
 
 
 # Create your views here.
@@ -86,8 +87,9 @@ def loggedin_view(request):
                 count += 1
                 request.session['questions'].append(num)
         print(request.session['questions'])
-        random.shuffle(request.session['questions'])
+        # random.shuffle(request.session['questions'])
         print(request.session['questions'])
+        request.session['questions'][1] = 1
 
         request.session['score'] = 0
         return render(request, "rules.html", {'first': request.session['questions'][1]})
@@ -99,7 +101,8 @@ def questions_api(request):  # if random function is used in url it always retur
     if request.method == 'POST' and 0 < int(request.POST.get("reqid", 1)) <= totalQuestions:
         if not verifyTime(request.POST.get("time")):
             return JsonResponse({'err': 'errdt'})
-        obj = Question.objects.get(id=request.session['questions'][int(request.POST.get("reqid", 1))])
+        obj = Question.objects.get(
+            id=request.session['questions'][int(request.POST.get("reqid", 1))])
         context = {
             'que': obj.problem,
             'opt1': obj.option_a,
@@ -130,7 +133,9 @@ def questions_view(request):
             'id_array': request.session['questions'],
             'dur': duration,
             'tred': tred,
-            'endtime': request.session['endtime']
+            'endtime': request.session['endtime'],
+            'userName': request.session['name'],
+            'ideHost': ideHost
         }
         return render(request, "questions.html", context)
     else:
@@ -156,7 +161,8 @@ def register_view(request):
                 pwd = form.cleaned_data.get('password1')
                 f = -1
                 try:
-                    f = func_timeout(15, loginquery, args=(email, pwd, request))
+                    f = func_timeout(
+                        15, loginquery, args=(email, pwd, request))
                 except FunctionTimedOut:
                     print("Error E-55692 = Firebase Error")
                     err = "Error E-55692. Contact PASC volunteer or try again"
@@ -164,7 +170,8 @@ def register_view(request):
                     print("Firestore Successful")
                     print("ReqUID = " + request.session['userid'])
                     # user = form.save()
-                    user = User.objects.create_user(first_name=request.session['name'], username=email, password=pwd)
+                    user = User.objects.create_user(
+                        first_name=request.session['name'], username=email, password=pwd)
                     user.save()
                     login(request, user)
                     # messages.info(request, f"You are now logged in as: {name}")
@@ -209,7 +216,8 @@ def set_cookie(response, key, value, days_expire=7):
 
 def logout_request(request):
     if (request.session.get('authenticate', None) == 'yes'):
-        set_cookie(response, 'just_cause', 'tMgaCNOgpybhQL4jZOVoViuKRsRfUyVHN9JkmBU4h7Cf6tlT33zsdSb7MShmgini')
+        set_cookie(response, 'just_cause',
+                   'tMgaCNOgpybhQL4jZOVoViuKRsRfUyVHN9JkmBU4h7Cf6tlT33zsdSb7MShmgini')
         logout(request)
         messages.info(request, "Bye!")
         return redirect("register")
