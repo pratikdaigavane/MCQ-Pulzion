@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<title>Pulzion 19</title>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'>    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<style>
+    body {
+  margin: 0;
+  text-align: center;
+  display: flex;
+  min-height: 100vh;
+  font-family: sans-serif;
+  background:black;
+}
+
+h1,
+p {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.app {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  justify-content: center;
+
+}
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.item {
+  width: 90px;
+  height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+.radio {
+  display: none;    
+}
+.radio ~ span:hover {
+  font-size: 3rem;
+  filter: grayscale(0);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.radio:checked ~ span {
+  filter: grayscale(0);
+  font-size: 4rem;
+}  
+
+.car{
+      height:450px;
+      margin-left:60px;
+      margin-right:50px;
+      -webkit-box-shadow: 0px 0px 40px 10px rgba(73,196,227,0.6);
+      -moz-box-shadow: 0px 0px 40px 10px rgba(73,196,227,0.6);
+      box-shadow: 0px 0px 40px 10px rgba(73,196,227,0.6);
+      background: rgba(0,0,0,.8);
+    background: #232323;
+    color: #58D3F7;
+    justify-content: flex-start;
+    border-radius: 23px;
+    }
+    .carh{
+      text-align:center;
+      border-color:grey;
+      text-shadow: 1px 1px;
+    }
+    .carb{
+      text-align:center;
+      margin-top:110px;
+      text-shadow: 1px 1px;
+      font-size:40px;
+    }
+    .score
+    {
+      font-family: "Times New Roman", Times, serif;
+    }
+    
+    #scoreboard{
+      position: fixed;
+      float: right;     
+  }
+ .avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 1em;
+     background: transparent;
+}
+    
+
+.table{
+  margin-top: 50px;
+  margin-right: 5px;
+  width: 500px;
+    max-height: 500px;
+    position: absolute;
+    border: transparent;
+    float: right;
+     -webkit-box-shadow: 0px 0px 40px 10px rgba(73,196,227,0.6);
+      -moz-box-shadow: 0px 0px 40px 10px rgba(73,196,227,0.6);
+      box-shadow: 0px 0px 40px 10px rgba(73,196,227,0.6);
+    } 
+        
+
+.table thead th{
+  background: #58D3F7;  
+  padding: 15px;
+  color:black;
+  font-size:15px;
+  font-weight:bold;
+  text-align:left;
+    border-color: #fff;
+    
+}
+.table tbody tr{
+  padding:5px 15px;
+  background:#232323;
+  font-size:16px;
+  border-bottom:0px solid #232323;
+    text-align:left;
+    
+}    
+
+.table tr ,.table tr td:nth-child(odd){
+text-align:center;
+    color:  #58D3F7;
+      text-align:left;
+  
+}
+    
+.table tr ,.table tr td:nth-child(even){
+text-align:center;
+    color:  #58D3F7;
+      text-align:left;
+ 
+}   
+    
+.table tbody td {
+  padding:5px 15px;
+  background:#232323;
+  font-size:16px;
+    border-top: 10px solid #232323;
+  border-bottom:10px solid #232323;
+      text-align:left;
+ 
+}
+.table tbody td:nth-of-type(7) {
+  font-weight:bold;
+}
+.table tbody tr:hover td {
+    background:#1d1d1d;
+}
+.table tbody tr {
+  color:#747474;
+}
+.table tbody tr:first-child {
+  color: #58D3F7;
+}
+
+  </style>
+<script>
+  window.console = window.console || function(t) {};
+</script>
+<script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+</head>
+<body translate="no">
+	<div class="col-sm-1" ></div>
+
+<div class="col-sm-5" style="margin-top:40px;">
+  <div class="card car">
+  <h2 class="card-header carh">Scorecard</h2>
+  <div class="card-body carb">
+  You have secured
+  <h1 class="display-1">50/100</h1>
+  </div>
+</div>
+</div>
+
+<div class="col-sm-5" style="margin-top:40px;>
+	<div class="containers"> 
+	 <div class="card car">
+  <h2 class="card-header carh">Leader Board</h2>
+  <div class="card-body carb">
+  
+  </div>
+</div>   
+
+</div>
+<div class="col-sm-1" ></div>
+
+
+	</div>
+
+<script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js'></script>
+    
+<script id="rendered-js">
+      $(function () {
+  var userids =
+  "8538112;8522223;8709661;7992142;8535690;8235600;8533138;8538605;8532460;8525172";
+  var num = userids.split(";").length; 
+  $.getJSON(
+  "https://api.stackexchange.com/2.2/users/" +
+  userids +
+  "?order=desc&sort=reputation&site=stackoverflow",
+  function (data) {
+    for (var i = 0; i < 5; i++) {if (window.CP.shouldStopExecution(0)) break;
+      $("#socreboard tbody").append(
+      "<tr> <td>" + (
+      i + 1) +
+      "</td><td><img class='avatar' src='" +
+      data.items[i].profile_image +
+      "'/>" +
+      data.items[i].display_name +
+      "</td><td>" +
+      data.items[i].reputation +
+      "</td></tr>");
+
+    }window.CP.exitedLoop(0);
+  });
+
+});
+      //# sourceURL=pen.js
+    </script>    
+
+<div class="app">
+<h1 style="color: #ffffff;">How was your experience?</h1>
+<p style="color: #ffffff;">Let us know how we did</p>
+<div class="container">
+<div class="item">
+<label for="0">
+<input class="radio" type="radio" name="feedback" id="0" value="0">
+<span>🤬</span>
+</label>
+</div>
+<div class="item">
+<label for="1">
+<input class="radio" type="radio" name="feedback" id="1" value="1">
+<span>🙁</span>
+</label>
+</div>
+<div class="item">
+<label for="2">
+<input class="radio" type="radio" name="feedback" id="2" value="2">
+<span>😶</span>
+</label>
+</div>
+<div class="item">
+<label for="3">
+<input class="radio" type="radio" name="feedback" id="3" value="3">
+<span>😁</span>
+</label>
+</div>
+<div class="item">
+<label for="4">
+<input class="radio" type="radio" name="feedback" id="4" value="4">
+<span>😍</span>
+</label>
+</div>
+</div>
+</div>
+
+</body>
+</html>

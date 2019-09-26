@@ -23,3 +23,9 @@ class Scores(models.Model):
 
     class Meta:
         verbose_name_plural = "Scores"
+
+
+class auth(models.Model):
+    mail = models.TextField()
+    participant1 = models.TextField()
+    tickedid = models.TextField()

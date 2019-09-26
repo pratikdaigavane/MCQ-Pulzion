@@ -14,6 +14,27 @@
     <link href='{% static "css/login.css" %}' rel='stylesheet'>
     <link href='{% static "cdn/bootstrap.min.css" %}' rel='stylesheet'>
 
+    <link href='{% static "cdn/bootstrap.min.css" %}' rel='stylesheet'>
+<link href='{% static "css/login.css" %}' rel='stylesheet'>
+<link href="{% static "css/rules.css" %}" rel='stylesheet'>
+        <style>
+        .event-logo{
+			width: 30vh;
+			height: 30vh;
+		}
+
+		.event-logo-wrapper{
+			position: absolute;
+			text-align: center;
+			color: white;
+			box-shadow: -2px -2px 20px 0px rgba(73, 196, 227, 0.9);
+			border-bottom-right-radius: 25px;
+			background: black;
+            left: 0%;
+            top: 0%;
+		}
+        </style>
+
     <style>
 
         .login-box {
@@ -145,17 +166,28 @@
     }
 
 	$(document).ready(function () {
-		var f = 1;
+        var f = 1;
+        var csrf = "{{csrf_token}}";
 		$("#formsub").submit(function(e){
 			if(f===1){
 				e.preventDefault();
-				$("#id_password2").val($("#id_password1").val());
-				f = 0;
-				$("#timestamp").val(timestamp());
 				$("#subfrm").attr("disabled", true).val("Signing In...");
-				$("#formsub").submit();
-
-			}
+				$.ajax({
+                    headers: {"X-CSRFToken": csrf},
+                    url: "/",
+                    method: "post",
+                    data:{'username': $("#id_username").val(), 'password1': $("#id_password1").val(), 'password2': $("#id_password1").val(), 'timestamp': timestamp()},
+                    success: function (res) {
+                        if(res.status == 1){
+                            $("#body1").css("display", "none");
+                            $("#body2").css("display", "block");
+                        }
+                        else
+                            $("#id_err").text(res.err);
+                        $("#subfrm").attr("disabled", false).val("Sign In");
+                    } 
+                });
+            }
 		});
 	});
 
@@ -180,15 +212,32 @@
     setFlickers();
 </script>
 
+<script>
+        function deleteAllCookies()
+        {
+            var d = new Date();
+            d.setTime(d.getTime()-15*60*1000);
+            document.cookie.split(";").forEach(function(c)
+            {
+                console.log(c);
+                if(c.split("=")[0] !== "csrftoken")
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + d.toGMTString() + ";path=/");
+                else
+                    console.log("CSRF token cookie not deleted!");
+            });
+        }
+  </script>
+
 </head>
 <body translate="no">
+    <div id="body1">
 <div id='stars'></div>
 <div class="event-logo-wrapper">
 	<img class="event-logo" src="{% static "img/event_logo.jpg" %}" >
-	<h1>Cerebro</h1>
+	<h1>{{ eventName }}</h1>
 </div>
 <div id="content" class="col-md-6" style="visibility: visible">
-    <h1 class="flicker" style="opacity: 0.889582">PULZION<br>2019</h1>
+    <h1 class="flicker" style="opacity: 0.889582; margin-top: 15vh">PULZION<br>2019</h1>
 
 </div>
 <div class="login-box">
@@ -206,7 +255,7 @@
             <label>Password</label>
         </div>
 		<div class="group" style="text-align: center;">
-			<div style="height: 72px"><b style="color: red">{{err}}<br>&nbsp;</b></div>
+			<div style="height: 72px"><b style="color: red" id="id_err"><br>&nbsp;</b></div>
         	 <input type="submit" value="Sign In" id="subfrm">
 		</div>
     </form>
@@ -217,7 +266,45 @@
         <img src="{% static "img/logo.png" %}" >
 	</div>
 </div>
+</div>
 
+<div id="body2" style="display: none">
+        <div class="event-logo-wrapper">
+                <img class="event-logo" src="{% static "img/event_logo.jpg" %}" >
+                <h1>{{ eventName }}</h1>
+            </div>
+            
+            <div class="rules">
+                <center>
+                  <h1><b>Set of Rules</b></h1>
+                </center>
+                <ul>
+                  <li>
+                    <p>
+                      • No internet Access is available .  
+                      <br>• Session is of 20 minutes.
+                      <br>• There are Total 50 Questions.
+                        <br>• Marking Scheme is +2/-1.
+
+                      <br>• Do Not Peek In Another User's PC!
+                      <br> • You can Bookmark Any Question  by clicking On Bookmark button.
+                        <br> • You can use IDE which supports C/C++, Java and Python.
+                      <br> • Blue sign Indicates Bookmarked.
+                      <br> • Green Sign Indicates Attempted.
+                      <br> • You Can View Total Bookmarked Question In Question List!
+                    </p>
+                  </li>
+                </ul>
+            </div> 
+            <a href="/questions" class="submit" style="text-decoration: none">N E X T</a>
+            
+                    <div class="container">
+                <div class="avatar">
+                    <img src="{% static "img/logo.png" %}" >
+                </div>
+            </div>
+            
+</div>
 
 
 

@@ -4,12 +4,16 @@ var autotime = 10;
 
 function autotimeout()
 {
-    if(autotime>0){
-        $("#modalsubmit").text("OK (00:" + autotime + ")");
-        autotime -= 1;
-        setTimeout(function(){autotimeout()}, 1000);
-    }else
-        $("#frmsubmit").submit();
+	if(!submitted) {
+		if (autotime > 0) {
+			$("#modalsubmit").text("OK (00:" + autotime + ")");
+			autotime -= 1;
+			setTimeout(function () {
+				autotimeout()
+			}, 1000);
+		} else
+			sub();
+	}
 }
 
 function autosubmit()
@@ -131,7 +135,7 @@ $(document).ready(function(){
 
 	function countdownFinished() {
 	    console.log(timestamp());
-	    autosubmit();
+	    sub();
 
 	}
 });

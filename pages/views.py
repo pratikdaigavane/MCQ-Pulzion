@@ -11,6 +11,7 @@ from config import *
 import firebase_admin
 from firebase_admin import credentials, firestore
 from func_timeout import func_timeout, FunctionTimedOut
+from questions.models import auth
 
 cred = credentials.Certificate('./firekey.json')
 if not len(firebase_admin._apps):
@@ -22,17 +23,18 @@ total_questions_db = Question.objects.count()
 
 
 def loginquery(email, pwd, request):
-    query = db.collection(eventNameDatabase).where('email', '==', email).get()
-    f = 0
-    for x in query:
-        data = x.to_dict()
-        if data['email'] == email and data['ticketno'] == pwd:
-            print("valiated")
-            f = 1
-            request.session['userid'] = x.id
-            request.session['name'] = data['name']
-            name = data['name']
-    return f
+    # request.session['userid'] = x.id
+    # request.session['name'] = data['name']
+    # name = data['name']
+
+    check = auth.objects.filter(mail=email, tickedid=pwd)
+    length = check.count()
+    if length != 0:
+        request.session['name'] = check[0].participant1
+        print("validated " + check[0].mail)
+        name = check[0].participant1
+        return 1
+    return 0
 
 
 def timestamp():
@@ -51,50 +53,21 @@ errdt = HttpResponse(
 
 # Create your views here.
 
-
 def loggedin_view(request):
-    if (request.session.get('authenticate', None) == 'yes'):
-        request.session['questions'] = []
-        request.session['questions'].clear()
-        request.session['questions'].append(total_questions_mcq)
-        # for i in range(1, total_questions_mcq + 1, 1):
-        #     request.session['questions'].append(random.randrange(1, total_questions_db + 1, 1))
-        count = 0
-        while True:
-            if count == level1:
-                break
-            num = random.randrange(1, total_questions_db + 1, 1)
-            queLevel = Question.objects.get(id=num).level
-            if queLevel == 1:
-                count += 1
-                request.session['questions'].append(num)
-        count = 0
-        while True:
-            if count == level2:
-                break
-            num = random.randrange(1, total_questions_db + 1, 1)
-            queLevel = Question.objects.get(id=num).level
-            if queLevel == 2:
-                count += 1
-                request.session['questions'].append(num)
-        count = 0
-        while True:
-            if count == level3:
-                break
-            num = random.randrange(1, total_questions_db + 1, 1)
-            queLevel = Question.objects.get(id=num).level
-            if queLevel == 3:
-                count += 1
-                request.session['questions'].append(num)
-        print(request.session['questions'])
-        # random.shuffle(request.session['questions'])
-        print(request.session['questions'])
-        request.session['questions'][1] = 1
+    request.session['questions'] = []
+    request.session['questions'].clear()
+    request.session['questions'].append(-1)
+    while True:
+        r = random.randrange(1, total_questions_db + 1, 1)
+        if r not in request.session['questions']:
+            request.session['questions'].append(r)
+        if len(request.session['questions']) == total_questions_mcq+1:
+            break
 
-        request.session['score'] = 0
-        return render(request, "rules.html", {'first': request.session['questions'][1]})
-    else:
-        return render(request, "403.html", {})
+    request.session['questions'][0] = total_questions_mcq
+    request.session['score'] = 0
+    print(request.session['questions'])
+    print(len(request.session['questions']))
 
 
 def questions_api(request):  # if random function is used in url it always return 2
@@ -147,12 +120,14 @@ def loggedout_view(request):
 
 
 def register_view(request):
-    if request.COOKIES.get('just_cause') == 'tMgaCNOgpybhQL4jZOVoViuKRsRfUyVHN9JkmBU4h7Cf6tlT33zsdSb7MShmgini':
+    if (request.COOKIES.get('just_cause') == 'tMgaCNOgpybhQL4jZOVoViuKRsRfUyVHN9JkmBU4h7Cf6tlT33zsdSb7MShmgini' or not (
+            useElectron)):
         request.session['authenticate'] = 'yes'
         err = ""
         if request.method == "POST":
             if not verifyTime(request.POST['timestamp']):
                 return errdt
+                print("dterr")
 
             form = UserCreationForm(request.POST)
 
@@ -167,20 +142,19 @@ def register_view(request):
                     print("Error E-55692 = Firebase Error")
                     err = "Error E-55692. Contact PASC volunteer or try again"
                 if f == 1:
-                    print("Firestore Successful")
-                    print("ReqUID = " + request.session['userid'])
                     # user = form.save()
                     user = User.objects.create_user(
                         first_name=request.session['name'], username=email, password=pwd)
                     user.save()
                     login(request, user)
                     # messages.info(request, f"You are now logged in as: {name}")
-
-                    return redirect("loggedin")
+                    print("Auth success")
+                    loggedin_view(request)
+                    return JsonResponse({'status': 1})
                 elif f == 0:
-                    messages.error(request, "Invalid username or password")
                     err = "Invalid username or password"
-
+                    print(err)
+                    return JsonResponse({'status': 0, 'err': err})
                 # except:
                 #     print("Error E-55692 = Firebase Error")
                 #     err = "Error E-55692. Contact PASC volunteer or try again"
@@ -190,16 +164,19 @@ def register_view(request):
                     err = "Duplicate user (You may have already attempted the test)"
                 else:
                     err = "Invalid data entered"
+                print(form.errors)
                 # err = str(form.errors)
+                return JsonResponse({'status': 0, 'err': err})
+
         form = UserCreationForm
         context = {
             "form": form,
-            "err": err
+            "err": err,
+            'eventName': eventName
         }
         err = ""
         return render(request, "login.html", context)
     else:
-        print("NORMAL")
         return render(request, "403.html", {})
 
 

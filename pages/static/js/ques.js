@@ -83,7 +83,7 @@ function getQuestion(reqQid)
         {
             setTimeout(function(){
                 qid=reqQid;
-                $("#quedisp").html(res.que);
+                $("#quedisp").text(res.que);
                 $("#qnum").text("Question No. " + qid);
                 $("#a").parent().parent().parent().find('.opttxt').text(res.opt1);
                 $("#b").parent().parent().parent().find('.opttxt').text(res.opt2);
@@ -166,28 +166,60 @@ function bookmark()
 
 });
 
+f=true;
 
 function sub()
 {
-    var obj = {};
-    var cookie = document.cookie.split(";");
-    // $("#modalsubmit").attr("disabled", true).text("Submitting test...");
-    // document.getElementById("modalsubmit").disabled = true;
-    // document.getElementById("modalsubmit").innerText = "Submitting test...";
-    for (x in cookie){
-        if(x>0&&(cookie[x].split(":")[0].split(" ")[1].split("=")[0]!='csrftoken'))
-        {
-            obj[cookie[x].split(":")[0].split(" ")[1].split("=")[0]] = cookie[x].split("=")[1];
-            console.log(cookie[x].split("=")[1].split(";")[1]);
+    if(f) {
+        var obj = {};
+        f=false;
+        var cookie = document.cookie.split(";");
+        // $("#modalsubmit").attr("disabled", true).text("Submitting test...");
+        // document.getElementById("modalsubmit").disabled = true;
+        // document.getElementById("modalsubmit").innerText = "Submitting test...";
+        for (x in cookie) {
+            if (x > 0 && (cookie[x].split(":")[0].split(" ")[1].split("=")[0] != 'csrftoken')) {
+                obj[cookie[x].split(":")[0].split(" ")[1].split("=")[0]] = cookie[x].split("=")[1];
+                console.log(cookie[x].split("=")[1].split(";")[1]);
+
+            }
 
         }
+        document.getElementById("modalsubmit").value = "Submitting test...";
+        document.getElementById("modalsubmit").disabled = true;
+        console.log("\n\n" + JSON.stringify(obj));
+        // deleteAllCookies();
 
+         function deleteAllCookies()
+        {
+            var d = new Date();
+            d.setTime(d.getTime()-15*60*1000);
+            document.cookie.split(";").forEach(function(c)
+            {
+                console.log(c);
+                if(c.split("=")[0] !== "csrftoken")
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + d.toGMTString() + ";path=/");
+                else
+                    console.log("CSRF token cookie not deleted!");
+            });
+        }
+
+        $.ajax({
+            headers: {"X-CSRFToken": csrf},
+            url: "sub/",
+            method: "post",
+            data: {answers: JSON.stringify(obj)},
+            success: function (res) {
+                if (res.status == 1) {
+                    $("#body2").css("display", "block");
+                    $("#body1").css("display", "none");
+                    $("#score").text("YOUR SCORE: " + res.score);
+                    submitted = true;
+                    $(".modal-backdrop").css("display", "none");
+                    deleteAllCookies()
+                }else
+                f=true;
+            }
+        });
     }
-    document.getElementById("inpans").value = JSON.stringify(obj);
-    document.getElementById("modalsubmit").value = "Submitting test...";
-    document.getElementById("modalsubmit").disabled = true;
-    console.log("\n\n" + JSON.stringify(obj));
-    // deleteAllCookies();
-
-    return true;
 }

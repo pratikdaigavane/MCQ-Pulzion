@@ -32,6 +32,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '192.168.43.79',
     '192.168.43.243',
+    '192.168.1.218',
+    '192.168.1.204'
 ]
 
 
@@ -58,8 +60,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'middlewares.adminAccessRestrict.adminRestrictMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
+
 ]
 
 ROOT_URLCONF = 'mcq.urls'

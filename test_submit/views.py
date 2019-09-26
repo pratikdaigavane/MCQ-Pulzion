@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.datetime_safe import datetime
 from func_timeout import func_timeout, FunctionTimedOut
@@ -18,8 +19,7 @@ def timestamp():
 
 
 def firescore(request, dump):
-    db.collection(eventNameDatabase).document(request.session['userid']).update(
-        {'score': request.session['score']})
+    print()
 
 
 def submit_data(request):
@@ -33,28 +33,25 @@ def submit_data(request):
             else:
                 request.session['score'] -= marksIncorrect
 
-        try:
-            func_timeout(7, firescore, args=(request, 0))
-            fb = 1
-        except FunctionTimedOut:
-            fb = 0
-
+        fb=0
         print(request.session['score'])
         score = request.session['score']
         Scores.objects.create(name=request.session['name'], username=request.user.username,
                               event=eventName, score=score, firebase=fb)
-        ranks = Scores.objects.all().order_by('-score')[:10]
-        print("--------------------------------------------")
-        print(len(ranks))
-        print("--------------------------------------------")
-        for y in ranks:
-            print(str(y.name) + "    " + str(y.score))
+        # ranks = Scores.objects.all().order_by('-score')[:10]
+        # print("--------------------------------------------")
+        # print(len(ranks))
+        # print("--------------------------------------------")
+        # for y in ranks:
+        #     print(str(y.name) + "    " + str(y.score))
 
         logout(request)
         context = {
-            'score': score
+            'score': score,
+            'status': 1
         }
 
-        return render(request, "loggedout.html", context)
+        return JsonResponse(context)
+        #return render(request, "loggedout.html", context)
     else:
         return redirect("/")

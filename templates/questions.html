@@ -35,17 +35,20 @@
       var endtime = "{{ endtime }}";
       var csrf = "{{csrf_token}}";
       var id_array = {{id_array}};
+      var submitted = false;
 
     </script>
     {% csrf_token %}
     <title></title>
   </head>
   <body>
+  <div id="body1">
     <!-- Navbar for submitting the test-->
 
 <div class="modal fade ide" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="max-width: 1000px">
     <div class="modal-content">
+        <button onclick="var ifr=document.getElementById('myFrame'); ifr.src=ifr.src;">Refresh IDE</button>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="background-color: black">
               <span aria-hidden="true"><i class="fa fa-times-circle" style="color: white"></i></span>
             </button>
@@ -59,7 +62,7 @@
 </div>
 
     <nav class="navbar navbar-dark bg-dark  justify-content fixed-top" id="mainNav"  >
-        <h3 class="primary" style="color: whitesmoke " > Hey,&nbsp;{{userName}}&nbsp;&nbsp;</h3>
+        <h3 class="primary" style="color: whitesmoke ;position: absolute;" > Hey,&nbsp;{{userName}}&nbsp;&nbsp;</h3>
     
    
       
@@ -221,7 +224,7 @@
 </div>
 
       <div class="container container-main center">
-        <h3 class="display-10">{{event}}</h3>
+        <h2 class="display-10">{{event}}</h2>
        
       </div>
 
@@ -240,7 +243,7 @@
           <div class=" row full-width-row description box2 rounded">
            <!--  <button type="button" class="btn "> <i class="fa fa-expand"></i></button> -->
 
-           <pre style="white-space:pre-wrap;color: white; font-size: 1.7rem; font-family: 'Ubuntu Mono',monospace" class="ques hide" id="quedisp">...</pre>
+           <pre style="white-space:pre-wrap;color: white; font-size: 1.3rem; font-family: 'Source Code Pro', monospace;" class="ques hide" id="quedisp" >...</pre>
         </div>
       </div>
 <div class="col-lg-4" >
@@ -327,7 +330,7 @@
     &nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;&nbsp;
     &nbsp;&nbsp;&nbsp;
     <button type="button" class="btn btn-outline-warning btn2" id="btnprev" onclick="getQuestion(qid-1)"><i class=" fa fa-arrow-left"></i>&nbsp&nbsp Previous Question</button>
-    <button type="button" class="btn  hide-on-small-only btn-outline-success btn2 " id="btnnext" onclick="getQuestion(qid+1)"><span class="hide-on-small-only">&nbsp&nbspSave & Next </span> <i class=" fa fa-arrow-right"></i></button>
+    <button type="button" class="btn  hide-on-small-only btn-outline-success btn2 " id="btnnext" onclick="getQuestion(qid+1)"><span class="hide-on-small-only">&nbsp&nbspNext </span> <i class=" fa fa-arrow-right"></i></button>
 
 
    <!--  <button type="button" class="btn btn-outline-info btn2"><i class=" fa fa-eraser"></i>&nbsp&nbspClear Response</button> -->
@@ -370,17 +373,19 @@
       
       <div class="modal-footer">
         <button type="button btn" class="btn btn-outline-danger modalclose" data-dismiss="modal" data-target="body">No</button>
-          <form name="frmsubmit" onsubmit="return sub()" id="frmsubmit" action="{% url 'submit_data' %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" id="inpans" name="answers" value="">
-    <input type="submit" id="modalsubmit" class="btn btn-outline-success heythere" value="Yes, Submit!">
-</form>
+    <input type="submit" id="modalsubmit" class="btn btn-outline-success heythere" value="Yes, Submit!" onclick="sub()">
       </div>
     </div>
   </div>
 </div>
+      </span>
+    </div></div></div></div>
 
+<div id="body2" style="background: black; display: none">
+<h1 style="position: absolute;top:50%;left:50%;transform: translate(-50%, -50%); color: white" id="score">
 
+      </h1>
+</div>
 
 
 
@@ -391,18 +396,6 @@
 <script src="{% static "js/ques.js" %}"></script>
 <script src="{% static "js/timer.js" %}"></script>
 <script>
-
-
-
-
-  $(function()
-  {
-    $('on-hover').hover(function()
-    {
-      $('on-hover').attr('i','fa fa-bookmark');
-    }
-    )
-  })
 
 
 
@@ -427,8 +420,6 @@
 </script>
 
 
-
-
-
 </body>
+
 </html>
