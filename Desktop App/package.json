@@ -1,0 +1,44 @@
+{
+  "name": "mcq-pulzion",
+  "version": "2.3.0",
+  "description": "A MCQ platform for Pulzion 2019",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:linux": "electron-builder"
+  },
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "PratikDaigavane <daigavanep@gmai.com>",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^5.0.6",
+    "electron-builder": "^20.44.4",
+    "electron-packager": "^13.1.1"
+  },
+  "dependencies": {
+    "electron-args": "^0.1.0",
+    "electron-builder-squirrel-windows": "^21.0.16",
+    "remote": "^0.2.6",
+    "require": "^2.4.20"
+  },
+  "build": {
+    "appId": "com.pratik.mcq-pulzion",
+    "linux": {
+      "target": [
+        "snap",
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icons/icon.png"
+    }
+  }
+}
