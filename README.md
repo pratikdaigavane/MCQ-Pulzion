@@ -35,34 +35,25 @@ This is  an  MCQ Platform developed for Pulzion'19 , TechFest PICT, Pune
           
 
 
-          # Duration of test
-          duration = 2000  # Format mmss
+          > Duration of test
+          * duration = 2000  > Format mmss
 
-          # Time at which timer becomes red
-          tred = '2000'  # Format "mmss"
+          * Time at which timer becomes red
+          tred = '2000'  > Format "mmss"
 
-          useElectron = False
+          * useElectron = False
 
-          '''
-          WARNING !
-          Make Sure that 
-          level1 + level2 + level3 = totalQuestions
-          '''
+          
 
-          # Total Question to be displayed
-          totalQuestions = 50
-          # Level 1 Questions
-          level1 = 50
-          # Level 2 Questions
-          level2 = 0
-          # Level 3 Questions
-          level3 = 0
+          > Total Question to be displayed
+          * totalQuestions = 50
+          
 
-          # Correct Marks
-          marksCorrect = 2
+          > Correct Marks
+          * marksCorrect = 2
 
-          # Incorrect Marks(DO NOT ADD MINUS SIGN!!!)
-          marksIncorrect = 1
+          > Incorrect Marks(DO NOT ADD MINUS SIGN!!!)
+          * marksIncorrect = 1
 
 
 
