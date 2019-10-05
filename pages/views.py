@@ -13,6 +13,9 @@ from firebase_admin import credentials, firestore
 from func_timeout import func_timeout, FunctionTimedOut
 from questions.models import auth
 
+
+# Firebase credentials
+
 cred = credentials.Certificate('./firekey.json')
 if not len(firebase_admin._apps):
     firebase_admin.initialize_app(cred, options={'httpTimeout': 3})
@@ -22,10 +25,9 @@ total_questions_mcq = totalQuestions
 total_questions_db = Question.objects.count()
 
 
+# Login the user.
+
 def loginquery(email, pwd, request):
-    # request.session['userid'] = x.id
-    # request.session['name'] = data['name']
-    # name = data['name']
 
     check = auth.objects.filter(mail=email, tickedid=pwd)
     length = check.count()
@@ -37,21 +39,27 @@ def loginquery(email, pwd, request):
     return 0
 
 
+# Get current timestamp.
+
 def timestamp():
     return datetime.now().strftime('%Y%m%d%H%M%S')
 
+
+# Verify if Server and client time has the difference of at the most 200s.
 
 def verifyTime(ctime):
     if ctime is not None and -200 <= int(ctime) - int(timestamp()) <= 200:
         return True
     return False
 
+# Wrong date and time error.
 
 errdt = HttpResponse(
     "<h2 style='color: red;'>Error : 4572724461746554696d65</h2>")
 
 
-# Create your views here.
+# Rules page view. Determines the IDs of Questions to be served form database and maps them with 
+# Question Number displayed to the user.
 
 def loggedin_view(request):
     request.session['questions'] = []
@@ -70,7 +78,9 @@ def loggedin_view(request):
     print(len(request.session['questions']))
 
 
-def questions_api(request):  # if random function is used in url it always return 2
+# Fetches the required Question from database and send to the frontend in JSON format
+
+def questions_api(request):
     if request.method == 'POST' and 0 < int(request.POST.get("reqid", 1)) <= totalQuestions:
         if not verifyTime(request.POST.get("time")):
             return JsonResponse({'err': 'errdt'})
@@ -88,6 +98,8 @@ def questions_api(request):  # if random function is used in url it always retur
     else:
         return HttpResponseForbidden()
 
+
+# Renders the Questions View page.
 
 def questions_view(request):
     if (request.session.get('authenticate', None) == 'yes'):
@@ -115,9 +127,13 @@ def questions_view(request):
         return render(request, "403.html", {})
 
 
+# Score display Page.
+
 def loggedout_view(request):
     return render(request, "loggedout.html", {})
 
+
+# Render Login page(homepage).
 
 def register_view(request):
     if (request.COOKIES.get('just_cause') == 'tMgaCNOgpybhQL4jZOVoViuKRsRfUyVHN9JkmBU4h7Cf6tlT33zsdSb7MShmgini' or not (
@@ -180,6 +196,7 @@ def register_view(request):
         return render(request, "403.html", {})
 
 
+
 def set_cookie(response, key, value, days_expire=7):
     if days_expire is None:
         max_age = 365 * 24 * 60 * 60  # one year
@@ -190,6 +207,8 @@ def set_cookie(response, key, value, days_expire=7):
     response.set_cookie(key, value, max_age=max_age, expires=expires, domain=settings.SESSION_COOKIE_DOMAIN,
                         secure=settings.SESSION_COOKIE_SECURE or None)
 
+
+# Logout the current user.
 
 def logout_request(request):
     if (request.session.get('authenticate', None) == 'yes'):

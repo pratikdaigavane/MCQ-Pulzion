@@ -1,7 +1,8 @@
 from django.db import models
 
 
-# Create your models here.
+
+# Model for Questions.
 
 class Question(models.Model):
     problem = models.TextField()
@@ -12,6 +13,8 @@ class Question(models.Model):
     correct_option = models.CharField(max_length=1, blank=False, null=False)
     level = models.PositiveSmallIntegerField(default=1)
 
+
+# Model for Scores.
 
 class Scores(models.Model):
     name = models.TextField()
@@ -24,6 +27,8 @@ class Scores(models.Model):
     class Meta:
         verbose_name_plural = "Scores"
 
+
+# Model for Users (to be fectched form Firebase).
 
 class auth(models.Model):
     mail = models.TextField()

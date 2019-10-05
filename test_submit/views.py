@@ -11,16 +11,13 @@ from django.contrib.auth import logout
 cred = credentials.Certificate('./firekey.json')
 db = firestore.client()
 
+# Get current timestamp.
 
 def timestamp():
     return datetime.now().strftime('%Y%m%d%H%M%S')
 
-# Create your views here.
-
-
-def firescore(request, dump):
-    print()
-
+# Gets the answers of user, checks with actual answers from Database and
+# calculates the score as per the marking scheme defined in config.py file.
 
 def submit_data(request):
     ansdict = json.loads(str(request.POST['answers']))
@@ -38,12 +35,6 @@ def submit_data(request):
         score = request.session['score']
         Scores.objects.create(name=request.session['name'], username=request.user.username,
                               event=eventName, score=score, firebase=fb)
-        # ranks = Scores.objects.all().order_by('-score')[:10]
-        # print("--------------------------------------------")
-        # print(len(ranks))
-        # print("--------------------------------------------")
-        # for y in ranks:
-        #     print(str(y.name) + "    " + str(y.score))
 
         logout(request)
         context = {
@@ -52,6 +43,5 @@ def submit_data(request):
         }
 
         return JsonResponse(context)
-        #return render(request, "loggedout.html", context)
     else:
         return redirect("/")
