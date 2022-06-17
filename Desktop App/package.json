@@ -17,7 +17,7 @@
   "author": "PratikDaigavane <daigavanep@gmai.com>",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^5.0.6",
+    "electron": "^15.5.5",
     "electron-builder": "^20.44.4",
     "electron-packager": "^13.1.1"
   },
